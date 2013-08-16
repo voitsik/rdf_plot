@@ -1,0 +1,5 @@
+*.[oa]
+*~
+*.swp
+# Qt Creator files
+rdf_plot*
