@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
     if(fd < 0)
         handle_error("open");
 
-    if (fstat(fd, &sb) < -1)
+    if (fstat(fd, &sb) < 0)
         handle_error("fstat");
 
     length = sb.st_size;
