@@ -137,7 +137,7 @@ static int print_800frames(const char *frame, size_t offset, const char *end,
     const unsigned w = 1200, h = 800;
     time_t time = 0;
     char time_str[64], sec_str[16];
-    char img_fname[128];
+    char img_fname[256];
     gdImagePtr im;
 
     im = gdImageCreateTrueColor(w, h);
@@ -155,7 +155,7 @@ static int print_800frames(const char *frame, size_t offset, const char *end,
         }
     }
     
-    sprintf(img_fname, "%s_%03d.png", file_info->name, sec);
+    snprintf(img_fname, sizeof(img_fname), "%s_%04d.png", file_info->name, sec);
     print_string(im, w, 10, file_info->exper);
     print_string(im, w, 30, file_info->terminal);
     time = file_info->time0 + sec;
