@@ -41,7 +41,7 @@ const char version[] = "1.0";
 
 
 #define FRAME_SIZE 40000UL
-static const uint64_t syn64 = 0xFA463F11034CC457;
+static const uint64_t syn64 = 0xFA463E11034CC457;
 static const long shift = 60;
 
 struct rdf_info{
