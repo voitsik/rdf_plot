@@ -46,41 +46,48 @@ static const long shift = 60;
 
 struct rdf_info{
     char sig[5];
-    char date[18];
-    char terminal[11];
-    char source[11];
-    char exper[11];
+    char date[19];
+    char station[18];
+    char source[18];
+    char exper[18];
     time_t time0;
     char name[128];
 };
+
+
+#define GET_FIELD(dest, src, n)     \
+        do {                        \
+            strncpy(dest, src, n);  \
+            dest[n] = 0;            \
+        } while(0)
 
 
 static void fill_rdf_info(const char *data, struct rdf_info *info)
 {
     struct tm date;
 
-    memset(info, 0, sizeof(struct rdf_info));
-
     puts("********************");
 
-    strncpy(info->sig, data, 5);
-    info->sig[4] = 0;
+    GET_FIELD(info->sig, data, 4);
     puts(info->sig);
     
-    strncpy(info->date, &data[6], 18);
-    info->date[17] = 0;
+    GET_FIELD(info->date, &data[6], 18);
     puts(info->date);
 
-    strncpy(info->terminal, &data[24], 11);
-    info->terminal[10] = 0;
-    puts(info->terminal);
+    if(info->sig[3] == '1'){
+        GET_FIELD(info->station, &data[24], 11);
+        GET_FIELD(info->source, &data[35], 11);
+        GET_FIELD(info->exper, &data[46], 11);
+    }else if(info->sig[3] == '2'){
+        GET_FIELD(info->station, &data[0x18], 17);
+        GET_FIELD(info->source, &data[0x29], 17);
+        GET_FIELD(info->exper, &data[0x3A], 17);
+    }else{
+        return;
+    }
 
-    strncpy(info->source, &data[35], 11);
-    info->source[10] = 0;
+    puts(info->station);
     puts(info->source);
-
-    strncpy(info->exper, &data[46], 11);
-    info->exper[10] = 0;
     puts(info->exper);
 
     puts("********************");
@@ -157,7 +164,7 @@ static int print_800frames(const char *frame, size_t offset, const char *end,
     
     snprintf(img_fname, sizeof(img_fname), "%s_%04d.png", file_info->name, sec);
     print_string(im, w, 10, file_info->exper);
-    print_string(im, w, 30, file_info->terminal);
+    print_string(im, w, 30, file_info->station);
     time = file_info->time0 + sec;
     ctime_r(&time, time_str);
     time_str[strlen(time_str)-1] = 0;
@@ -231,7 +238,7 @@ void work(const char *data, size_t len, unsigned start,
 
     memset(&file_info, 0, sizeof(struct rdf_info));
     /* Get information about file */
-    if(strncmp(data, "RDF1", 5) == 0)
+    if(strncmp(data, "RDF", 3) == 0)
         fill_rdf_info(data, &file_info);
     
     strncpy(file_info.name, file_name, 128);
