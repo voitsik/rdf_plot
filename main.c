@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011-2013 by Petr Voytsik                               *
+ *   Copyright (C) 2011-2014 by Petr Voytsik                               *
  *                                                                         *
  *   This program is free software: you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 
 const char program[] = "rdf_plot";
 const char author[]  = "Petr Voytsik";
-const char version[] = "1.0";
+const char version[] = "1.1";
 
 
 #define handle_error(msg) \
